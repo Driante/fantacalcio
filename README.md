@@ -6,5 +6,4 @@ FantAnalysis tutto:
 L'unica cosa che manca è il punteggio formula1 perché mi rifiuto
 
 # To do list:
-- Estrarre direttamente i goal, non ricavarli dai fanta punti
 - Trovare un metodo migliore del decoupagé di Andrea
