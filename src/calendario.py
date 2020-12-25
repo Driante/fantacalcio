@@ -41,11 +41,11 @@ def clean_calendar(calendar_raw):
                 for idx,res in enumerate(results):
                     Gol[idx] = int(res.split('-')[0])
                     Gol[idx+4] = int(res.split('-')[1])
-                df_persquadra['Gol'] = Gols
+                df_persquadra['Gol'] = Gol
                 df_persquadra= df_persquadra.astype(object)
                 ordine_giornate = [ngiornata]
             else:
-                print(ngiornata,j)
+                #print(ngiornata,j)
                 squadresx = calendar_raw.iloc[ig+1:ig+5,j]
                 squadredx = calendar_raw.iloc[ig+1:ig+5,j+3]
                 for idx,squadra in enumerate(squadresx):
@@ -63,7 +63,7 @@ def clean_calendar(calendar_raw):
                 for idx,squadra in enumerate(squadredx):
                     #Per le squadre sulla sinistra il punteggio si trova alla loro destra
                     df_persquadra.at[squadra,'Fantapunti'] \
-                    = np.append(df_persquadra.at[squadre.values[0],'Fantapunti'],calendar_raw.iloc[ig+idx+1,j+2])
+                    = np.append(df_persquadra.at[squadra,'Fantapunti'],calendar_raw.iloc[ig+idx+1,j+2])
                     df_persquadra.at[squadra,'Avversari'] \
                     = np.append(df_persquadra.at[squadra,'Avversari'],calendar_raw.iloc[ig+idx+1,j])
                     if calendar_raw.iloc[ig+idx+1,j+4].split('-')[1].isdigit():
@@ -74,5 +74,12 @@ def clean_calendar(calendar_raw):
                     = np.append(df_persquadra.at[squadra,'Gol'],gol)
               
                 ordine_giornate.append(ngiornata)
-    #Todo: sort all the arrays
+    srtidx = np.argsort(ordine_giornate)
+    for squadra in df_persquadra.index:
+        df_persquadra.loc[squadra].Fantapunti=\
+        df_persquadra.loc[squadra].Fantapunti[srtidx]
+        df_persquadra.loc[squadra].Avversari =\
+        df_persquadra.loc[squadra].Avversari[srtidx]
+        df_persquadra.loc[squadra].Gol =\
+        df_persquadra.loc[squadra].Gol[srtidx]
     return  df_persquadra,np.array(ordine_giornate)
